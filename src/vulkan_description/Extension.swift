@@ -68,9 +68,9 @@ public struct Extension: Equatable, Hashable {
   /// The interface this extension targets (vulkan or vulkansc)
   public enum API: Equatable, Hashable {
     /// Indicates a vulkan extension for the specified target
-    case vulkan(target: Target)
+    case vulkan(target: Target?)
     /// Indicates a vulkan extension audited for safety-criticial systems
-    case vulkansc(target: Target)
+    case vulkansc(target: Target?)
   }
 
   /// The extension profile
@@ -219,7 +219,7 @@ extension Extension: Decodable {
       profile = .disabled
     } else {
       let supported = supported.split(separator: ",")
-      let target = try container.decode(Target.self, forKey: .type)
+      let target = try container.decodeIfPresent(Target.self, forKey: .type)
       var supportAPIs: [API] = []
       if supported.contains("vulkansc") {
         supportAPIs.append(.vulkansc(target: target))
