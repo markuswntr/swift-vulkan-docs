@@ -9,10 +9,14 @@ public struct `Type`: Equatable, Hashable {
   /// `bitmask`, `define`, `enum`, `funcpointer`, `group`, `handle`, `include`,
   /// `struct`, and `union`, as described below.
   public enum Category: Equatable, Hashable {
-    case basetype
+    /// - Parameter type: Notes another type the base type is an alias of
+    case basetype(type: String?)
     case define
     case include
-    case bitmask
+    /// - Parameter type: Another type used to define bit values. This value is
+    /// only in use for VkFlags64 based flag bits. VkFlags based types use the
+    /// "requires" attribute on Type.
+    case bitmask(bitvalues: String?)
     case `enum`
     case funcpointer
     case group
@@ -253,6 +257,14 @@ extension `Type`: Decodable {
     case category
     case comment
   }
+  /// Coding keys specific to base types
+  enum BaseTypeCodingKeys: String, CodingKey {
+    case type
+  }
+  /// Coding keys specific to base types
+  enum BitmaskTypeCodingKeys: String, CodingKey {
+    case bitvalues
+  }
   /// Coding keys specific to handle types
   enum HandleCodingKeys: String, CodingKey {
     case parent
@@ -284,13 +296,21 @@ extension `Type`: Decodable {
     let categoryString = try container.decodeIfPresent(String.self, forKey: .category)
     switch categoryString {
     case .none: category = nil // Category is optional
-    case "basetype": category = .basetype
     case "define": category = .define
     case "include": category = .include
-    case "bitmask": category = .bitmask
+    case "bitmask":
+      let container = try decoder.container(keyedBy: BitmaskTypeCodingKeys.self)
+      category = .bitmask(
+        bitvalues: try container.decodeIfPresent(String.self, forKey: .bitvalues)
+      )
     case "enum": category = .enum
     case "funcpointer": category = .funcpointer
     case "group": category = .group
+    case "basetype":
+      let container = try decoder.container(keyedBy: BaseTypeCodingKeys.self)
+      category = .basetype(
+        type: try container.decodeIfPresent(String.self, forKey: .type)
+      )
     case "handle":
       let container = try decoder.container(keyedBy: HandleCodingKeys.self)
       category = .handle(
