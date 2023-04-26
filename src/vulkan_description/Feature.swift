@@ -73,11 +73,8 @@ public struct Feature: Decodable, Equatable, Hashable {
 //  order. Each tag describes a set of interfaces that is respectively required
 //  for, or removed from, this feature, as described below.
 
-  /// The extension definitions that are added to the API surface
-  public var definitions: [Extension.Definitions] {
-    require ?? [Extension.Definitions(_constants: [], _types: [], _commands: [])]
-  }
-  let require: [Extension.Definitions]?
+  /// The definitions that are added to the API surface through this extension
+  public let require: [Extension.Definitions]?
 }
 
 // MARK: - Conformance to CustomStringConvertible & CustomDebugStringConvertible

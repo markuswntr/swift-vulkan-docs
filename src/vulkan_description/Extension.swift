@@ -168,10 +168,7 @@ public struct Extension: Equatable, Hashable {
   public let comment: Comment?
 
   /// The extension definitions that are added to the API surface
-  public var definitions: Definitions {
-    _definitions ?? Definitions(_constants: [], _types: [], _commands: [] )
-  }
-  let _definitions: Definitions?
+  public var require: [Definitions]?
 }
 
 // MARK: - Conformance to Decodable
@@ -201,7 +198,7 @@ extension Extension: Decodable {
     protect = try container.decodeIfPresent(String.self, forKey: .protect)
     platform = try container.decodeIfPresent(String.self, forKey: .platform)
     comment = try container.decodeIfPresent(String.self, forKey: .comment)
-    _definitions = try container.decodeIfPresent(Definitions.self, forKey: .require)
+    require = try container.decodeIfPresent([Definitions].self, forKey: .require)
 
     // Properties with defaults
     sortOrder = try container
