@@ -214,6 +214,10 @@ public struct Typedef: Equatable, Hashable {
 
     /// Contains an arbitrary string (unused).
     public let comment: Comment?
+
+    /// API name for which this definition is specialized, so that different
+    /// APIs may have different definitions for the same member.
+    public let api: String?
   }
 
   /// Another type name this type requires to complete its definition.

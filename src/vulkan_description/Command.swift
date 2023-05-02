@@ -26,30 +26,14 @@ public struct Command: Equatable, Hashable {
 //  tag define the name, signature, and parameters of the command. In this case
 //  the allowed attributes include:
 
+  /// Arbitrary string (unused).
+  public let comment: Comment?
+
   public enum Queue: String, Decodable, Equatable, Hashable {
     case compute
     case transfer
     case graphics
   }
-
-  public enum RenderPass: String, Decodable, Equatable, Hashable {
-    case outside
-    case inside
-  }
-
-  public enum BufferLevel: String, Decodable, Equatable, Hashable {
-    case primary
-    case secondary
-  }
-
-  public enum Pipeline: String, Decodable, Equatable, Hashable {
-    case compute
-    case transfer
-    case graphics
-  }
-
-  /// Arbitrary string (unused).
-  public let comment: Comment?
 
   /// A string identifying the command queues this
   /// command can be placed on. The format of the string is one or more of
@@ -59,8 +43,9 @@ public struct Command: Equatable, Hashable {
 
   /// The command queues this command can be placed on
   public var queues: [Queue]? {
-    _queues?.split(separator: ",").compactMap {
-      Queue(rawValue: String($0))
+    _queues?.split(separator: ",").map {
+      // This conversion must succeed, or runtime crash
+      Queue(rawValue: String($0))!
     }
   }
   
@@ -71,7 +56,7 @@ public struct Command: Equatable, Hashable {
 
   /// Possible successful return codes from the command
   public var successCodes: [String]? {
-    return _successcodes?.split(separator: ",").compactMap(String.init)
+    return _successcodes?.split(separator: ",").map(String.init)
   }
 
   /// A string describing possible error
@@ -81,7 +66,12 @@ public struct Command: Equatable, Hashable {
 
   /// Possible error return codes from the command
   public var errorCodes: [String]? {
-    return _errorcodes?.split(separator: ",").compactMap(String.init)
+    return _errorcodes?.split(separator: ",").map(String.init)
+  }
+
+  public enum RenderPass: String, Decodable, Equatable, Hashable {
+    case outside
+    case inside
   }
 
   /// A string identifying whether the command
@@ -96,17 +86,29 @@ public struct Command: Equatable, Hashable {
     return _renderpass.flatMap(RenderPass.init).map {[$0]}
   }
 
+  public enum BufferLevel: String, Decodable, Equatable, Hashable {
+    case primary
+    case secondary
+  }
+
   /// A string identifying the command
   /// buffer levels that this command can be called by. The format of the
   /// string is one or more of the terms `"primary"` and `"secondary"`,
   /// with multiple terms separated by commas (`","`).
-  private let cmdbufferlevel: String?
+  private let _cmdbufferlevel: String?
 
   /// The command buffer levels that this command can be called by.
-  public var bufferLevels: [BufferLevel]? {
-    cmdbufferlevel?.split(separator: ",").compactMap {
-      BufferLevel(rawValue: String($0))
+  public var commandBufferLevels: [BufferLevel]? {
+    _cmdbufferlevel?.split(separator: ",").map {
+      // This conversion must succeed, or runtime crash
+      BufferLevel(rawValue: String($0))!
     }
+  }
+
+  public enum Pipeline: String, Decodable, Equatable, Hashable {
+    case compute
+    case transfer
+    case graphics
   }
 
   /// The pipeline type that this command uses when executed
@@ -145,6 +147,10 @@ public struct Command: Equatable, Hashable {
 //      not a parameter of the command but is related to one, and which also
 //      <<tag-command:param:attr,requires external synchronization>>. The text
 //      is intended to be incorporated into the API specification.
+
+  /// API name for which this definition is specialized, so that different APIs
+  /// may have different definitions for the same command.
+  public let api: String?
 }
 
 extension Command {
@@ -242,6 +248,10 @@ extension Command {
     public let type: String?
     /// The parameter name being described.
     public let name: String
+
+    /// API name for which this definition is specialized, so that different APIs
+    /// may have different definitions for the same command.
+    public let api: String?
   }
 }
 
@@ -252,13 +262,14 @@ extension Command: Decodable {
     case _successcodes = "successcodes"
     case _errorcodes = "errorcodes"
     case _renderpass = "renderpass"
-    case cmdbufferlevel
+    case _cmdbufferlevel = "cmdbufferlevel"
     case pipeline
     case name
     case alias
     case prototype = "proto"
     case parameters = "param"
     case comment
+    case api
   }
 }
 
