@@ -7,7 +7,14 @@ let package = Package(
     .library(name: "VulkanDescription", targets: ["VulkanDescription"])
   ],
   targets: [
-    .target(name: "VulkanDescription", path: "src/vulkan_description"),
-    .testTarget(name: "VulkanDescriptionTests", dependencies: ["VulkanDescription"])
+    .target(
+      name: "VulkanDescription",
+      path: "src/vulkan_description"
+    ),
+    .testTarget(
+      name: "VulkanDescriptionTests",
+      dependencies: ["VulkanDescription"],
+      path: "tests/description_tests"
+    )
   ]
 )

@@ -87,9 +87,9 @@ public struct Extension: Equatable, Hashable {
     /// Constants added to the API with this extension
     public var constants: [Constants.Constant] { _constants ?? [] }
 
-    let _types: [Type]?
+    let _types: [Typedef]?
     /// Types added to the API with this extension
-    public var types: [Type] { _types ?? [] }
+    public var types: [Typedef] { _types ?? [] }
 
     let _commands: [Command]?
     /// Commands added to the API with this extension
@@ -243,7 +243,7 @@ extension Extension.Definitions: Decodable {
     _commands = try container
       .decodeIfPresent([Command].self, forKey: .command)
     _types = try container
-      .decodeIfPresent([Type].self, forKey: .type)
+      .decodeIfPresent([Typedef].self, forKey: .type)
   }
 }
 

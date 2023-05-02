@@ -3,7 +3,7 @@
 /// with attributes or embedded tags denoting the type name and other types
 /// used in defining this type. In some cases, additional attribute and
 /// embedded type information is used to generate more complicated C types.
-public struct `Type`: Equatable, Hashable {
+public struct Typedef: Equatable, Hashable {
   /// A type which indicates that this type contains a more complex structured
   /// definition. At present the only accepted categories are `basetype`,
   /// `bitmask`, `define`, `enum`, `funcpointer`, `group`, `handle`, `include`,
@@ -247,7 +247,7 @@ public struct `Type`: Equatable, Hashable {
 }
 
 // MARK: - Conformance to Decodable
-extension `Type`: Decodable {
+extension Typedef: Decodable {
   /// Coding keys for any type
   enum CodingKeys: String, CodingKey {
     case requires

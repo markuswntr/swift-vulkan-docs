@@ -34,7 +34,7 @@ public struct Registry: Equatable, Hashable {
   /// API types.
   ///
   /// Usually only one tag is used.
-  public var types: [Type] { _types.type }
+  public var types: [Typedef] { _types.type }
 
   /// API token names and values.
   ///
@@ -143,7 +143,7 @@ extension Registry: Decodable {
   /// The tag:comment tags are used mostly to indicate grouping of related types
   fileprivate struct Types: Decodable, Equatable, Hashable {
     let comment: Comment?
-    let type: [Type]
+    let type: [Typedef]
   }
 
   /// = Command Blocks (tag:commands tag)
