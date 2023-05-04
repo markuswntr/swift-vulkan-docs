@@ -40,11 +40,22 @@
 /// The similar `"VK_API_VERSION_1_0"` symbols are part of the API and their
 /// values are packed integers containing Vulkan core version numbers.
 public struct Feature: Decodable, Equatable, Hashable {
+  /// The API this feature targets (vulkan or vulkansc, or both)
+  public enum API: String, Hashable {
+    /// Indicates a vulkan feature
+    case vulkan
+    /// Indicates a vulkansc feature
+    case vulkansc
+  }
+
 
   // MARK: Attributes
 
   /// Required API names this feature is defined for, such as `vulkan`.
-  public let api: String
+  internal let api: String
+  public var apis: [API] {
+    api.split(separator: ",").map { API(rawValue: String($0))! }
+  }
 
   /// Version name, used as the C preprocessor token under which the version's
   /// interfaces are protected against multiple inclusion.

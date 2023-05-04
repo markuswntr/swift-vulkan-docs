@@ -94,6 +94,8 @@ public struct Extension: Equatable, Hashable {
     let _commands: [Command]?
     /// Commands added to the API with this extension
     public var commands: [Command] { _commands ?? [] }
+
+    public let api: String?
   }
 
   /// Extension name, following the conventions in the Vulkan Specification.
@@ -234,6 +236,7 @@ extension Extension.Definitions: Decodable {
     case `enum`
     case type
     case command
+    case api
   }
 
   public init(from decoder: Decoder) throws {
@@ -244,6 +247,7 @@ extension Extension.Definitions: Decodable {
       .decodeIfPresent([Command].self, forKey: .command)
     _types = try container
       .decodeIfPresent([Typedef].self, forKey: .type)
+    api = try container.decodeIfPresent(String.self, forKey: .api)
   }
 }
 
