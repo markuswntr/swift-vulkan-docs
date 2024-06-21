@@ -33,6 +33,7 @@ public struct Constants: Equatable, Hashable {
     //        variables of each type
     case enumeration = "enum"
     case bitmask
+    case constants
   }
 
   /// Each Constant defines a single Vulkan (or other API) token.

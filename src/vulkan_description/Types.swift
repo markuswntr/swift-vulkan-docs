@@ -75,6 +75,7 @@ public struct Typedef: Equatable, Hashable {
     case minMul = "min,mul"
     case minPot = "min,pot"
     case maxPot = "max,pot"
+    case not
   }
 
   /// The tag:member tag defines the type and name of a structure or union member.
