@@ -88,6 +88,27 @@ public struct Typedef: Equatable, Hashable {
   /// </command>
   /// ```
   public struct Member: Decodable, Equatable, Hashable {
+    enum CodingKeys: String, CodingKey {
+      case values
+      case len
+      case altlen
+      case externsync
+      case optional
+      case selector
+      case selection
+      case noautovalidity
+      case limittype
+      case type
+      case name
+      case `enum`
+      case comment
+      case api
+      // Gather all "not tagged" data inside this property. It includes the
+      // pointer information (* or const* or const*const*) as this is not
+      // properly tagged but simply gets copy pasted into the C header - which
+      // we can not do and so we keep this reference for further analysis.
+      case remainder = ""
+    }
     /// Only valid on the `sType` member of a struct.
     /// This is a comma-separated list of enumerant values that are valid for
     /// the structure type; usually there is only a single value.
@@ -218,6 +239,8 @@ public struct Typedef: Equatable, Hashable {
     /// API name for which this definition is specialized, so that different
     /// APIs may have different definitions for the same member.
     public let api: String?
+
+    public let remainder: [String]
   }
 
   /// Another type name this type requires to complete its definition.
