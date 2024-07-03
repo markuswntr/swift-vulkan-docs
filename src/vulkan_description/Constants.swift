@@ -48,10 +48,10 @@ public struct Constants: Equatable, Hashable {
   /// this is expected to be a benign change.
   public struct Constant: Decodable, Equatable, Hashable {
     /// Arbitrary string (unused).
-    public let comment: Comment?
+    public var comment: Comment?
 
     /// Enumerant name, a legal C preprocessor token name.
-    public let name: String
+    public var name: String
 
     /// A numeric value in the form of a legal C expression when
     /// evaluated at compile time in the generated header files.
@@ -59,7 +59,7 @@ public struct Constants: Equatable, Hashable {
     /// for a previously defined value, though more complex expressions are
     /// sometimes employed for <<compile-time-constants, compile time
     /// constants>>.
-    public let value: String?
+    public var value: String?
 
     /// A literal integer bit position in a bitmask.
     ///
@@ -69,13 +69,13 @@ public struct Constants: Equatable, Hashable {
     /// or for <<adding-bitflags, flag bits used with 64-bit flag types>>.
     /// Exactly one of attr:value and attr:bitpos must be present in an tag:enum
     /// tag.
-    public let bitpos: String?
+    public var bitpos: String?
 
     /// API names for which this definition is specialized, so that different
     /// APIs may have different values for the same token. This definition is
     /// only used if the requested API name matches the attribute.
     /// May be used to address subtle incompatibilities.
-    public let api: String?
+    public var api: String?
 
     /// May be used only when attr:value is specified.
     /// In this case, attr:type is optional except when defining a
@@ -89,51 +89,51 @@ public struct Constants: Equatable, Hashable {
     /// compile-time constants.
     ///
     /// Public interface: constant(value:type:)
-    public let type: String?
+    public var type: String?
 
     /// Name of another enumerant this is an alias
     /// of, used where token names have been changed as a result of profile
     /// changes or for consistency purposes. An enumerant alias is simply a
     /// different attr:name for the exact same attr:value or attr:bitpos.
-    public let alias: String?
+    public var alias: String?
 
     // FIXME: Not documented - but existing maybe?
-    public let extends: String?
+    public var extends: String?
 
     /// An additional preprocessor token used to protect an enum definition.
-    public let protect: String?
+    public var protect: String?
   }
 
   /// String naming the C `enum` type whose members are defined by this enum
   /// group. If present, this attribute should match the attr:name attribute of
   /// a corresponding tag:type tag.
-  public let name: String?
+  public var name: String?
 
   /// Describes the data type of the values of this group if it is a C enum.
   /// At present the only accepted categories are `enum` and `bitmask`. `nil`
   /// indicates a C `#define`.
-  public let type: ConstantType?
+  public var type: ConstantType?
 
   /// Integers defining the start and end of
   /// a reserved range of enumerants for a particular vendor or purpose.
   /// attr:start must be less than or equal to attr:end. These fields define
   /// formal enumerant allocations, and are made by the Khronos Registrar on
   /// request from implementers following the enum allocation policy.
-  public let start: Int?, end: Int?
+  public var start: Int?, end: Int?
 
   /// String describing the vendor or purpose to whom a reserved range of
   /// enumerants is allocated.
-  public let vendor: String?
+  public var vendor: String?
 
   /// Arbitrary string (unused).
-  public let comment: Comment?
+  public var comment: Comment?
 
   /// Bit width required for the generated enum value type.
   /// If omitted, a default value of 32 is used.
-  public let bitwidth: Int?
+  public var bitwidth: Int?
 
   /// Zero or more `Constant`s in arbitrary order
-  public let constants: [Constant]
+  public var constants: [Constant]
 }
 
 // MARK: - Conformance to Decodable

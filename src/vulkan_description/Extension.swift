@@ -95,7 +95,13 @@ public struct Extension: Equatable, Hashable {
     /// Commands added to the API with this extension
     public var commands: [Command] { _commands ?? [] }
 
-    public let api: String?
+    private let api: String?
+
+    public var apis: [Feature.API] {
+      api?.split(separator: ",").compactMap { sub in
+        Feature.API(rawValue: String(sub))
+      } ?? Feature.API.allCases // empty means all platforms
+    }
   }
 
   /// Extension name, following the conventions in the Vulkan Specification.
@@ -118,6 +124,8 @@ public struct Extension: Equatable, Hashable {
   /// layers using the tag. If not present, this can be taken from the
   /// corresponding tag attribute just like `author`.
   public let contact: String?
+
+  public let supported: String
 
   /// Indicates the extension profile, e.g. targets vulkan instances or devices,
   /// or if it is in disabled state indicating that it is not fully defined yet,
@@ -212,8 +220,9 @@ extension Extension: Decodable {
     let requires = try container.decodeIfPresent(String.self, forKey: .requires)
     requiredExtensions = requires?.split(separator: ",").map(String.init)
 
+    // FIXME: This stacked coding is really useless. Flatten it out
     // Special coding cases
-    let supported = try container.decode(String.self, forKey: .supported)
+    self.supported = try container.decode(String.self, forKey: .supported)
     if supported == "disabled" {
       profile = .disabled
     } else {

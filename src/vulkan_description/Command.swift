@@ -210,7 +210,7 @@ extension Command {
       // FIXME: There exists optional definitions containing both values,
       //        i.e. `optional="false,true"` (yes,...). This is wrongly
       //        evaluated here - evaluate at another time if issues arose.
-      optional == "true"
+      optional?.hasPrefix("true") == true
     }
 
     /// If the parameter is a union, attr:selector identifies another parameter

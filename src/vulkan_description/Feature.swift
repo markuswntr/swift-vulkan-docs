@@ -41,11 +41,11 @@
 /// values are packed integers containing Vulkan core version numbers.
 public struct Feature: Decodable, Equatable, Hashable {
   /// The API this feature targets (vulkan or vulkansc, or both)
-  public enum API: String, Hashable {
-    /// Indicates a vulkan feature
-    case vulkan
+  public enum API: String, CaseIterable, Hashable {
     /// Indicates a vulkansc feature
     case vulkansc
+    /// Indicates a vulkan feature
+    case vulkan
   }
 
 
